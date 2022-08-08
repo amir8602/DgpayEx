@@ -39,8 +39,22 @@ public class Main {
             for (int i = 0; i < row1; i++) {
                 for (int j = 0; j < column2; j++) {
                     for (int k = 0; k < row2; k++) {
+                        ThreadMul threadMul = new ThreadMul(matrix1[i][k] , matrix2[k][j]);
+                        threadMul.start();
+                        try {
+                            threadMul.join();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        ThreadSum threadSum = new ThreadSum(threadMul.getMultiplication(),sum);
+                        threadSum.start();
+                        try {
+                            Thread.sleep(1);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        sum=threadSum.getSum();
 
-                        sum = sum + (matrix1[i][k] * matrix2[k][j]);
                     }
                     result[i][j] = sum;
                     sum = 0;
